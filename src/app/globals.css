@@ -1,0 +1,18 @@
+@import "tailwindcss";
+
+/* Opcional: estilos mínimos por defecto */
+:root {
+  color-scheme: dark;
+}
+
+html, body {
+  min-height: 100%;
+}
+
+/* Mejora de legibilidad para opciones de selects en Windows */
+select option {
+  color: #0f172a; /* slate-900 sobre fondo blanco del menú nativo */
+}
+select option:disabled {
+  color: #94a3b8; /* slate-400 para placeholders deshabilitados */
+}
