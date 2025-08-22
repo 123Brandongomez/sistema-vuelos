@@ -1,0 +1,61 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Usuario {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  username  String   @unique
+  password  String
+  token     String?
+}
+
+model Destino {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  coddestino  Int      @unique
+  descripcion String
+  vuelos      Vuelo[]  @relation("DestinoVuelos")
+}
+
+model Aerolinea {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  codaerolinea Int      @unique
+  descripcion  String
+  vuelos       Vuelo[]  @relation("AerolineaVuelos")
+}
+
+model Vuelo {
+  id           String     @id @default(auto()) @map("_id") @db.ObjectId
+  codvuelo     String     @unique
+  destino      Destino    @relation("DestinoVuelos", fields: [coddestino], references: [coddestino])
+  coddestino   Int
+  aerolinea    Aerolinea  @relation("AerolineaVuelos", fields: [codaerolinea], references: [codaerolinea])
+  codaerolinea Int
+  salaabordaje String
+  horasalida   DateTime
+  horallegada  DateTime
+  pasajeros    Pasajero[] @relation("VueloPasajeros")
+}
+
+model Pasajero {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  nombres   String
+  apellidos String
+  email     String
+  telefono  Int
+  codvuelo  String
+  vuelo     Vuelo    @relation("VueloPasajeros", fields: [codvuelo], references: [codvuelo])
+  foto      String?
+}
+
